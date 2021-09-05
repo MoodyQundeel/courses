@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=ImageProcessor
+comment1.params=in
+comment1.target=edu.duke.ImageResource\ convertGrey(edu.duke.ImageResource)
+comment2.params=
+comment2.target=void\ convertManyGrey()
+comment3.params=in
+comment3.target=edu.duke.ImageResource\ Invert(edu.duke.ImageResource)
+comment4.params=
+comment4.target=void\ InvertMany()
+comment5.params=
+comment5.target=void\ test()
+numComments=6
