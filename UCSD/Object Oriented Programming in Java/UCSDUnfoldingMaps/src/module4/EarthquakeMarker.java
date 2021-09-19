@@ -4,10 +4,14 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PGraphics;
 
+import java.awt.Color;
+import java.awt.color.*;
+
+
 /** Implements a visual marker for earthquakes on an earthquake map
  * 
  * @author UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Ahmed Alaa
  *
  */
 public abstract class EarthquakeMarker extends SimplePointMarker
@@ -36,9 +40,6 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	/** Greater than or equal to this threshold is a deep depth */
 	public static final float THRESHOLD_DEEP = 300;
 
-	// ADD constants for colors
-
-	
 	// abstract method implemented in derived classes
 	public abstract void drawEarthquake(PGraphics pg, float x, float y);
 		
@@ -68,7 +69,17 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		drawEarthquake(pg, x, y);
 		
 		// OPTIONAL TODO: draw X over marker if within past day		
-		
+		if (this.getProperty("age").equals("Past Day")) {
+			pg.fill(0, 0, 0);
+			if (! this.isOnLand) {
+			pg.line(x, y, (float) (x + radius*1.5), (float) (y + radius*1.5));
+			pg.line((float) (x+radius*1.5), y, x, (float) (y+radius*1.5));
+			}
+			else {
+				pg.line((float) (x - radius/2), (float) (y - radius/2), (float) (x + radius/2), (float) (y + radius/2));
+				pg.line((float) (x + radius/2), (float) (y - radius/2), (float) (x - radius/2), (float) (y + radius/2));
+			}
+		}
 		// reset to previous styling
 		pg.popStyle();
 		
@@ -81,6 +92,16 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	// You might find the getters below helpful.
 	private void colorDetermine(PGraphics pg) {
 		//TODO: Implement this method
+		float depth = getDepth();
+		if (depth < THRESHOLD_INTERMEDIATE) {
+			pg.fill(pg.color(255, 255, 0));
+		}
+		else if (depth < THRESHOLD_DEEP) {
+			pg.fill(pg.color(0, 0, 255));
+		}
+		else {
+			pg.fill(pg.color(255, 0, 0));
+		}
 	}
 	
 	
