@@ -11,7 +11,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
-import de.fhpotsdam.unfolding.providers.Google;
+import de.fhpotsdam.unfolding.providers.Microsoft.HybridProvider;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
@@ -20,7 +20,7 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Ahmed Alaa
  * Date: July 17, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
@@ -70,7 +70,7 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new HybridProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    //earthquakesURL = "2.5_week.atom";
 		}
@@ -133,7 +133,6 @@ public class EarthquakeCityMap extends PApplet {
 		if (lastSelected != null) {
 			lastSelected.setSelected(false);
 			lastSelected = null;
-		
 		}
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
@@ -146,6 +145,12 @@ public class EarthquakeCityMap extends PApplet {
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
 		// TODO: Implement this method
+		for (Marker m : markers) {
+			if (m.isInside(map, mouseX, mouseY) && lastSelected == null) {
+				lastSelected = (CommonMarker) m;
+				m.setSelected(true);
+			}
+		}
 	}
 	
 	/** The event handler for mouse clicks
@@ -159,6 +164,17 @@ public class EarthquakeCityMap extends PApplet {
 		// TODO: Implement this method
 		// Hint: You probably want a helper method or two to keep this code
 		// from getting too long/disorganized
+		if (lastClicked != null) {
+			unhideMarkers();
+			lastClicked.setClicked(false);
+			lastClicked = null;
+		}
+		else {
+			selectMarkerifClickedQuakes();
+			if (lastClicked == null) {
+				selectMarkerifClickedCities();	
+			}
+		}
 	}
 	
 	
@@ -173,6 +189,57 @@ public class EarthquakeCityMap extends PApplet {
 		}
 	}
 	
+	private void selectMarkerifClickedQuakes() {
+		for (Marker m : quakeMarkers) {
+			if (m.isInside(map, mouseX, mouseY) && lastClicked == null) {
+				((CommonMarker) m).setClicked(true);
+				lastClicked = (CommonMarker) m;
+			}
+		}
+		
+		for (Marker m : cityMarkers) {
+			if (lastClicked != null) {
+				double distanceFromSelected = lastClicked.getDistanceTo(m.getLocation());
+				EarthquakeMarker eqm = (EarthquakeMarker) lastClicked;
+				double threatCircle = eqm.threatCircle();
+				if (((CommonMarker) m).getClicked() == false && distanceFromSelected > threatCircle) {
+					m.setHidden(true);
+				}
+			}
+		}
+		
+		for (Marker m : quakeMarkers) {
+			if (lastClicked != null && ((CommonMarker) m).getClicked() == false) {
+				m.setHidden(true);
+			}
+		}
+	}
+	
+	private void selectMarkerifClickedCities() {
+		for (Marker m : cityMarkers) {
+			if (m.isInside(map, mouseX, mouseY) && lastClicked == null) {
+				((CommonMarker) m).setClicked(true);
+				lastClicked = (CommonMarker) m;
+			}
+		}
+		
+		for (Marker m : quakeMarkers) {
+			if (lastClicked != null) {
+				double distanceFromSelected = lastClicked.getDistanceTo(m.getLocation());
+				EarthquakeMarker eqm = (EarthquakeMarker) m;
+				double threatCircle = eqm.threatCircle();
+				if (((CommonMarker) m).getClicked() == false && distanceFromSelected > threatCircle) {
+					m.setHidden(true);
+				}
+			}
+		}
+		
+		for (Marker m : cityMarkers) {
+			if (lastClicked != null && ((CommonMarker) m).getClicked() == false) {
+				m.setHidden(true);
+			}
+		}
+	}
 	// helper method to draw key in GUI
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here

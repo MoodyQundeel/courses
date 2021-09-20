@@ -4,8 +4,6 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PGraphics;
 
-import java.awt.Color;
-import java.awt.color.*;
 
 
 /** Implements a visual marker for earthquakes on an earthquake map
