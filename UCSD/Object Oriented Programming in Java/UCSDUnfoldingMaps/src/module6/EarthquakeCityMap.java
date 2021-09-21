@@ -12,7 +12,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
-import de.fhpotsdam.unfolding.providers.Google;
+import de.fhpotsdam.unfolding.providers.Microsoft.HybridProvider;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
@@ -21,7 +21,7 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Ahmed Alaa
  * Date: July 17, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
@@ -64,6 +64,7 @@ public class EarthquakeCityMap extends PApplet {
 	// NEW IN MODULE 5
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
+	private static final CommonMarker spareMarker = new CityMarker(new Location(1, 2));
 	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
@@ -73,7 +74,7 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new HybridProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    //earthquakesURL = "2.5_week.atom";
 		}
@@ -81,8 +82,8 @@ public class EarthquakeCityMap extends PApplet {
 		
 		// FOR TESTING: Set earthquakesURL to be one of the testing files by uncommenting
 		// one of the lines below.  This will work whether you are online or offline
-		//earthquakesURL = "test1.atom";
-		//earthquakesURL = "test2.atom";
+		// earthquakesURL = "test1.atom";
+		// earthquakesURL = "test2.atom";
 		
 		// Uncomment this line to take the quiz
 		//earthquakesURL = "quiz2.atom";
@@ -116,7 +117,8 @@ public class EarthquakeCityMap extends PApplet {
 	    }
 
 	    // could be used for debugging
-	    printQuakes();
+	    // printQuakes();
+	    sortAndPrint(50);
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
@@ -137,7 +139,14 @@ public class EarthquakeCityMap extends PApplet {
 	
 	
 	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
+	private void sortAndPrint(int numToPrint) {
+		EarthquakeMarker[] eqms = new EarthquakeMarker[quakeMarkers.size()];
+		eqms = quakeMarkers.toArray(eqms);
+		Arrays.sort(eqms);
+		for (int i = 0; i < numToPrint && i < eqms.length; i++) {
+			System.out.println(eqms[i]);
+		}
+	}
 	// and then call that method from setUp
 	
 	/** Event handler that gets called automatically when the 
@@ -190,10 +199,94 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		else if (lastClicked == null) 
 		{
-			checkEarthquakesForClick();
-			if (lastClicked == null) {
-				checkCitiesForClick();
+			if (mouseX >= 25 && mouseX <= 150 && mouseY >= 50 && mouseY <= 300) checkKeyforClick();
+			else {
+				checkEarthquakesForClick();
+				if (lastClicked == null) {
+					checkCitiesForClick();
+				}
 			}
+		}
+	}
+	
+	private void checkKeyforClick() {
+		if (mouseY > 95 && mouseY < 105) {
+			filterCities();
+		}
+		if (mouseY > 115 && mouseY < 125) {
+			filterLand();
+		}
+		if (mouseY > 135 && mouseY < 145) {
+			filterOcean();
+		}
+		if (mouseY > 185 && mouseY < 195) {
+			filterDepth(0, 70);
+		}
+		if (mouseY > 205 && mouseY < 215) {
+			filterDepth(70, 300);
+		}
+		if (mouseY > 225 && mouseY < 245) {
+			filterDepth(300, 99999999);
+		}
+		if (mouseY > 245 && mouseY < 255) {
+			filterRecent();
+		}
+	}
+	
+	private void filterCities() {
+		for (Marker marker : quakeMarkers) {
+			marker.setHidden(true);
+		}
+		lastClicked = spareMarker;
+	}
+	
+	private void filterLand() {
+		for (Marker marker : quakeMarkers) {
+			EarthquakeMarker eqm = (EarthquakeMarker) marker;
+			if (! eqm.isOnLand) {
+				marker.setHidden(true);
+			}
+		}
+		hideCities();
+		lastClicked = spareMarker;
+	}
+	
+	private void filterOcean() {
+		for (Marker marker : quakeMarkers) {
+			EarthquakeMarker eqm = (EarthquakeMarker) marker;
+			if (eqm.isOnLand) {
+				marker.setHidden(true);
+			}
+		}
+		hideCities();
+		lastClicked = spareMarker;
+	}
+	
+	private void filterDepth(int low, int high) {
+		for (Marker marker : quakeMarkers) {
+			float currDepth = Float.parseFloat(marker.getProperty("depth").toString());
+			if (currDepth < low || currDepth > high) {
+				marker.setHidden(true);
+			}
+		}
+		hideCities();
+		lastClicked = spareMarker;
+	}
+	
+	private void filterRecent() {
+		for (Marker marker : quakeMarkers) {
+			String age = marker.getStringProperty("age");
+			if (!("Past Hour".equals(age) || "Past Day".equals(age))) {
+				marker.setHidden(true);
+			}
+		}
+		hideCities();
+		lastClicked = spareMarker;
+	}
+	
+	private void hideCities() {
+		for (Marker marker : cityMarkers) {
+			marker.setHidden(true);
 		}
 	}
 	
