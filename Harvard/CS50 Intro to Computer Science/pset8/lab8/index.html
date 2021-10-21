@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            let alt = document.querySelector(".alert");
+
+            let correctBtn = document.querySelector(".btn-c");
+
+            let incorrectBtn = document.querySelectorAll(".btn-ic");
+
+            correctBtn.onclick = function() {
+                correctBtn.style.backgroundColor = "lightGreen";
+                alt.innerHTML = "Correct!";
+            };
+
+            for (let i = 0; i < 2; i++) {
+
+                incorrectBtn[i].onclick = function()
+                {
+                    incorrectBtn[i].style.backgroundColor = "red";
+                    alt.innerHTML = "Incorrect";
+                };
+
+            }
+
+
+
+
+            document.querySelector("form").addEventListener("submit", function() {
+
+                let answer = document.querySelector(".house").value;
+                let textArea = document.querySelector(".house");
+
+                if (answer == "Gryffindor") {
+                    textArea.style.backgroundColor = "lightGreen";
+                    let alt2 = document.querySelector("#alert-2");
+                    alt2.innerHTML = "Correct!";
+                }
+
+                else {
+                    textArea.style.backgroundColor = "red";
+                    let alt2 = document.querySelector("#alert-2");
+                    alt2.innerHTML = "Incorrect";
+                }
+
+            }, false);
+
+
+
+        });
+
+
+        </script>
+
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>Who was the headmaster of Hogwarts?</h3>
+                <h4 class="alert"></h4>
+                <button class="btn-ic">Professor Minerva McGonagall</button>
+                <button class="btn-c">Professor Albus Dumbledor</button>
+                <button class="btn-ic">Professor Severus Snape</button>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <form onsubmit="return false;">
+                    <h3>What house did Harry Potter belong to?</h3>
+                    <h4 id="alert-2"></h4>
+                    <input type="text" class="house">
+                    <input type="submit">
+                </form>
+
+            </div>
+
+        </div>
+    </body>
+</html>

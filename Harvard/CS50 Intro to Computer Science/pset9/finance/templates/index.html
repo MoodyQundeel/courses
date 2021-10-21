@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Shares</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td>{{ stocks["Total"] }}</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            {% for stock in stocks %}
+                {% if stock == "Cash" %}
+                    <tr>
+                        <td> {{ stock }}</td>
+                        <td colspan="2"></td>
+                        <td>{{ stocks[stock] }}</td>
+                    </tr>       
+                {% endif %}
+                {% if stock != "Total" and stock != "Cash" and stocks[stock][1] > 0 %}
+                    <tr>
+                        <td> {{ stock }}</td>
+                        <td> {{ stocks[stock][0] }}</td>
+                        <td> {{ stocks[stock][1] }}</td>
+                        <td> {{ stocks[stock][2] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: because it takes a long time to sort through random numbers but very little time to sort an already sorted list which makes sense since it has an O of n power 2 and an omega of n.
+
+sort2 uses: merge sort
+
+How do you know?: because it takes a short time to sort all the lists and it takes the same amount of time for sorted and random lists which makes sense since it has theta of n log(n).
+
+sort3 uses: selection sort
+
+How do you know?: because it takes a long time to sort all the lists and it takes the same amount of time for sorted and random lists which makes sense since it has theta of n power 2.
