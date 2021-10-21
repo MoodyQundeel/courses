@@ -1,0 +1,14 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+}
+
+#joinform { 
+    display: flex;
+    width: 20rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}

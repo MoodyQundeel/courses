@@ -1,0 +1,9 @@
+.messages {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    align-content: flex-start;
+    align-self: flex-start;
+}

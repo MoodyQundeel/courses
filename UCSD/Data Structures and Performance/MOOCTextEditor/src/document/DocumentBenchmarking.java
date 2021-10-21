@@ -37,6 +37,7 @@ public class DocumentBenchmarking {
 		// TODO: Fill in the rest of this method so that it runs two loops
 		// and prints out timing results as described in the assignment 
 		// instructions and following the pseudocode below.
+		System.out.printf("%-10s\t%-15s\t%-15s\n", "numChar", "Basic", "Efficient");
 		for (int numToCheck = start; numToCheck < numSteps*increment + start; 
 				numToCheck += increment)
 		{
@@ -58,7 +59,23 @@ public class DocumentBenchmarking {
 			 * 6. Print out the time it took to complete the loop in step 5 
 			 *      (on the same line as the first print statement) followed by a newline (\n) 
 			 */  
-			 
+			 System.out.printf("%-10s\t", numToCheck);
+			 String s = getStringFromFile(textfile, numToCheck);
+			 long startTime = System.nanoTime();
+			 for (int i = 0; i < trials; i++) {
+				 BasicDocument bd = new BasicDocument(s);
+				 bd.getFleschScore();
+			 }
+			 long finishTime = System.nanoTime();
+			 System.out.printf("%-15s\t", (finishTime-startTime) / 1000000000.0);
+			 startTime = System.nanoTime();
+			 for (int i = 0; i < trials; i++) {
+				 EfficientDocument ed = new EfficientDocument(s);
+				 ed.getFleschScore();
+			 }
+			 finishTime = System.nanoTime();
+			 System.out.printf("%-15s", ((finishTime-startTime) / 1000000000.0));
+			 System.out.println();
 		}
 	
 	}
