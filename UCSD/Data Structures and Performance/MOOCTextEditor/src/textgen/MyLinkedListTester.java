@@ -124,7 +124,12 @@ public class MyLinkedListTester {
 	public void testAddEnd()
 	{
         // TODO: implement this test
-		
+		LLNode<Integer> prev = list1.tail.prev;
+		list1.add(1);
+		assertEquals("AddEnd: check tail prev is = 1", list1.tail.prev.data, (Integer)1);
+		assertEquals("AddEnd: check newElement next = tail", list1.tail.prev.next, list1.tail);
+		assertEquals("AddEnd: check newElement prev is correct", list1.tail.prev.prev, prev);
+		assertEquals("AddEnd: check prev next is correct", prev.next, list1.tail.prev);
 	}
 
 	
@@ -133,6 +138,9 @@ public class MyLinkedListTester {
 	public void testSize()
 	{
 		// TODO: implement this test
+		assertEquals("Size: check emptyList size = 0", emptyList.size(), 0);
+		assertEquals("Size: check shortList size = 2", shortList.size(), 2);
+		assertEquals("Size: check longerList size = LONG_LIST_LENGTH", longerList.size(), LONG_LIST_LENGTH);
 	}
 
 	
@@ -145,6 +153,14 @@ public class MyLinkedListTester {
 	public void testAddAtIndex()
 	{
         // TODO: implement this test
+		LLNode<Integer> next = list1.getNode(1);
+		LLNode<Integer> prev = next.prev;
+		list1.add(1, 1);
+		LLNode<Integer> current = list1.getNode(1);
+		assertEquals("Add: check next prev is = 1", next.prev.data, (Integer)1);
+		assertEquals("Add: check current next = next", current.next, next);
+		assertEquals("Add: check current prev is prev", current.prev, prev);
+		assertEquals("Add: check prev next is current", prev.next, current);
 		
 	}
 	
@@ -153,7 +169,10 @@ public class MyLinkedListTester {
 	public void testSet()
 	{
 	    // TODO: implement this test
-	    
+	    int oldElement = list1.get(1);
+	    int setReturnValue = list1.set(1, 2);
+	    assertEquals("Set: check setReturnValue equals oldElement", setReturnValue, oldElement);
+	    assertEquals("Set: check newValue equals specified value", list1.get(1), (Integer)2);
 	}
 	
 	
