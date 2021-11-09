@@ -58,7 +58,7 @@ public class DictionaryBenchmarking {
 			endTime = System.nanoTime();
 			long timeBST = (endTime - startTime);
 			
-			System.out.println(numToCheck + "\t" + timeLL + "\t" + timeBST);
+			System.out.println(numToCheck + "  LinkedList: " + timeLL + "  BST: " + timeBST);
 			
 		}
 	

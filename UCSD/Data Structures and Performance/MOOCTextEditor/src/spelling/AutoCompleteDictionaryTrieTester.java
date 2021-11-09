@@ -29,7 +29,7 @@ public class AutoCompleteDictionaryTrieTester {
 	@Before
 	public void setUp() throws Exception 
 	{
-		emptyDict = new AutoCompleteDictionaryTrie();
+  		emptyDict = new AutoCompleteDictionaryTrie();
 		smallDict = new AutoCompleteDictionaryTrie();
 		largeDict = new AutoCompleteDictionaryTrie();
 

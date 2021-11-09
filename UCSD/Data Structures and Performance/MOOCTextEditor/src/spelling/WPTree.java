@@ -27,9 +27,9 @@ public class WPTree implements WordPath {
 	public WPTree () {
 		this.root = null;
 		// TODO initialize a NearbyWords object
-		// Dictionary d = new DictionaryHashSet();
-		// DictionaryLoader.loadDictionary(d, "data/dict.txt");
-		// this.nw = new NearbyWords(d);
+		Dictionary d = new DictionaryHashSet();
+		DictionaryLoader.loadDictionary(d, "data/dict.txt");
+		this.nw = new NearbyWords(d);
 	}
 	
 	//This constructor will be used by the grader code
@@ -42,7 +42,34 @@ public class WPTree implements WordPath {
 	public List<String> findPath(String word1, String word2) 
 	{
 	    // TODO: Implement this method.
-	    return new LinkedList<String>();
+		if (!nw.dict.isWord(word2)) return null;
+		
+		word1 = word1.toLowerCase();
+		word2 = word2.toLowerCase();
+		
+		LinkedList<WPTreeNode> queue = new LinkedList<WPTreeNode>();
+		LinkedList<String> visited = new LinkedList<String>();
+		
+		root = new WPTreeNode(word1, null);
+		queue.add(root);
+		visited.add(word1);
+		
+		while(!queue.isEmpty() && !visited.contains(word2)) {
+			WPTreeNode currentNode = queue.remove();
+			List<String> nearby = nw.distanceOne(currentNode.getWord(), true);
+			for (String w : nearby) {
+				if(!visited.contains(w)) {
+					WPTreeNode newNode = currentNode.addChild(w);
+					visited.add(w);
+					queue.add(newNode);
+					if (newNode.getWord().equals(word2)) {
+						return newNode.buildPathToRoot();
+					}
+				}
+			}
+		}
+		
+	    return null;
 	}
 	
 	// Method to print a list of WPTreeNodes (useful for debugging)
@@ -56,6 +83,10 @@ public class WPTree implements WordPath {
 		return ret;
 	}
 	
+	public static void main(String[] args) {
+		WPTree testTree = new WPTree();
+		System.out.println(testTree.findPath("Sad", "Glad"));
+	}
 }
 
 /* Tree Node in a WordPath Tree. This is a standard tree with each
@@ -142,6 +173,6 @@ class WPTreeNode {
         ret+=(" ]\n");
         return ret;
     }
-
+    
 }
 

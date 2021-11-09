@@ -40,6 +40,26 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean addWord(String word)
 	{
 	    //TODO: Implement this method.
+		word = word.toLowerCase();
+		
+		if (isWord(word)) return false;
+		
+		TrieNode currentNode = root;
+		
+		for (char c : word.toCharArray()) {
+			if (currentNode.getChild(c) == null) {
+				currentNode.insert(c);
+			}
+			
+			currentNode = currentNode.getChild(c);
+		}
+		
+		if (currentNode.getText().equals(word)) {
+			size++;
+			currentNode.setEndsWord(true);
+			return true;
+		}
+		
 	    return false;
 	}
 	
@@ -50,7 +70,7 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public int size()
 	{
 	    //TODO: Implement this method
-	    return 0;
+	    return size;
 	}
 	
 	
@@ -60,6 +80,22 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
 	public boolean isWord(String s) 
 	{
 	    // TODO: Implement this method
+		s = s.toLowerCase();
+		TrieNode currentNode = root;
+		
+		for (char c : s.toCharArray()) {
+			
+			if (currentNode.getChild(c) == null) {
+				return false;
+			}
+			
+			currentNode = currentNode.getChild(c);
+		}
+		
+		if (currentNode.getText().equals(s) && currentNode.endsWord()) {
+			return true;
+		}
+		       
 		return false;
 	}
 
@@ -100,8 +136,34 @@ public class AutoCompleteDictionaryTrie implements  Dictionary, AutoComplete {
     	 //       If it is a word, add it to the completions list
     	 //       Add all of its child nodes to the back of the queue
     	 // Return the list of completions
+    	 prefix = prefix.toLowerCase();
+    	 TrieNode currentNode = root;
+    	 List<String> completions = new LinkedList<String>();
     	 
-         return null;
+    	 for (char c : prefix.toCharArray()) {
+    		 if (currentNode.getText().equals(prefix)) {
+    			 break;
+    		 }
+    		 
+    		 if (currentNode.getChild(c) == null) {
+    			 return completions;
+    		 }
+    		 
+    		 currentNode = currentNode.getChild(c);
+    	 }
+         
+    	 LinkedList<TrieNode> queue = new LinkedList<TrieNode>();
+    	 queue.add(currentNode);
+    	 
+    	 while (!queue.isEmpty() && completions.size() < numCompletions) {
+    		 TrieNode nextNodeInQueue = queue.remove();
+    		 if (nextNodeInQueue.endsWord()) completions.add(nextNodeInQueue.getText());
+    		 for (char key : nextNodeInQueue.getValidNextCharacters()) {
+    			 queue.add(nextNodeInQueue.getChild(key));
+    		 }
+    	 }
+    	 
+    	 return completions;
      }
 
  	// For debugging
