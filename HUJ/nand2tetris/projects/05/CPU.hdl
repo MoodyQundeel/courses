@@ -31,7 +31,7 @@ CHIP CPU {
         instruction[16], // Instruction for execution
         reset;           // Signals whether to re-start the current
                          // program (reset==1) or continue executing
-                         // the current program (reset==0).
+                         // the current program (reset==0). 
 
     OUT outM[16],        // M value output
         writeM,          // Write to M? 
@@ -40,4 +40,45 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    
+    
+    // determine input of A register based on instruction type
+    Mux16(a=instruction, b=ALUout, sel=instruction[15], out=Muxout1);
+    Not(in=instruction[15], out=A);
+
+    // conditionally load A register in two cases:
+    // 1- A instruction
+    // 2- C instruction with destination bit == 1 for A register
+    Or(a=A, b=instruction[5], out=loadA);
+    ARegister(in=Muxout1, load=loadA, out=Aout, out[0..14]=addressM);
+    
+    // determine instruction type and redirect bits accordingly
+    // if A instruction send 0's to all other parts of the chip
+    // if C instruction redirect the correct control bits to the correct parts
+    Mux16(a=false, b=instruction, sel=instruction[15], out[0]=JMP0, out[1]=JMP1, out[2]=JMP2, out[3]=writeM, out[4]=loadD, out[6]=no, out[7]=f, out[8]=ny, out[9]=zy, out[10]=nx, out[11]=zx, out[12]=a);
+
+    // determine first ALU input based on "a" bit of instruction
+    Mux16(a=Aout, b=inM, sel=a, out=ALUin0);
+    
+    // load the D register with ALU output if loadD == 1
+    DRegister(in=ALUout, load=loadD, out=Dout);
+
+    // do the main computation
+    ALU(x=Dout, y=ALUin0, zx=zx, nx=nx, zy=zy, ny=ny, f=f, no=no, out=ALUout, out=outM, zr=isZero, ng=isNeg);
+
+    // conditional jump algorithm
+    Or(a=isZero, b=isNeg, out=isNotPos);
+    Not(in=isNotPos, out=isPos);
+    And(a=isPos, b=JMP0, out=JGT);
+    And(a=isZero, b=JMP1, out=JEQ);
+    Or(a=JGT, b=JEQ, out=JGE);
+    And(a=isNeg, b=JMP2, out=JLT);
+    Or(a=JLT, b=JGT, out=JNE);
+    Or(a=JEQ, b=JLT, out=JLE);
+    FullAdder(a=JMP0, b=JMP1, c=JMP2, sum=s0, carry=c0);
+    And(a=s0, b=c0, out=JMP);
+    Or8Way(in[0]=false, in[1]=JGT, in[2]=JEQ, in[3]=JGE, in[4]=JLT, in[5]=JNE, in[6]=JLE, in[7]=JMP, out=JMPcond);
+    
+    // determine the next instruction to execute
+    PC(in=Aout, load=JMPcond, inc=true, reset=reset, out[0..14]=pc);
 }
