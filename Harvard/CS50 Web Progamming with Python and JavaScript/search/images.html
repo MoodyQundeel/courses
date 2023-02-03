@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search</title>
+        <link rel="stylesheet" href="general.css" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="nav" class="flex">
+            <a href="index.html">Simple</a>
+            <a href="advanced.html">Advanced</a>
+        </div>
+        <div id="top"></div>
+
+        <form
+            id="mid"
+            class="flex xcenter direction-column"
+            action="https://google.com/search"
+        >
+            <div class="flex direction-column center">
+                <img src="google-logo.png" />
+                <span
+                    id="images-tag"
+                    style="
+                        color: #4487f6;
+                        display: inline;
+                        text-align: right;
+                        height: 0px;
+                    "
+                    >images</span
+                >
+            </div>
+            <input type="text" name="q" />
+            <input type="hidden" name="tbm" value="isch" />
+            <div
+                class="flex"
+                style="width: 250px; justify-content: space-between"
+            >
+                <input type="submit" value="Google Search" />
+                <input type="submit" name="btnI" value="I'm Feeling Lucky" />
+            </div>
+        </form>
+    </body>
+</html>
