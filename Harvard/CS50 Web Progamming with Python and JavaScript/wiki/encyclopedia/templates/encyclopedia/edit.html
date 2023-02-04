@@ -1,0 +1,15 @@
+{% extends "encyclopedia/layout.html" %} 
+{% block title %} 
+    {{ title }} 
+{% endblock %} 
+{% block body %}
+    <form class="container" action="{% url 'edit' title %}" method="post">
+        {% csrf_token %}
+        <div class="row mb-2">
+            <textarea class="col-12-lg col-9-m pt-2 pl-2" name="content">{{ entry }}</textarea>
+        </div>
+        <div class="row">
+            <button class="" type="submit">Submit</button>
+        </div>
+    </form>
+{% endblock %}
