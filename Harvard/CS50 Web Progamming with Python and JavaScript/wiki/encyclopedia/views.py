@@ -25,17 +25,18 @@ def entry(request, entry):
     elif isSearch:
         entriesList = []
         for e in util.list_entries():
-            if e.find(entry) == True:
+            if e.find(entry) != -1:
                 entriesList.append(e)
         if (len(entriesList) != 0):
             return render(request, "encyclopedia/index.html", {
                 "entries": entriesList
             })
 
-    return render(request, "encyclopedia/entry.html", {
-        "entry": "404",
-        "entry_content": markdown("#No entry with that name.")
+    return render(request, "encyclopedia/index.html", {
+        "error": "No entry with that name.",
+        "entries": util.list_entries()
     })
+
 
 
 def new(request):
@@ -64,6 +65,6 @@ def edit(request, entry):
         return HttpResponseRedirect(reverse('entry', args=[entry]))
 
 
-def random():
+def random(request):
     entry = r.choice(util.list_entries())
     return HttpResponseRedirect(reverse('entry', args=[entry]))

@@ -12,5 +12,7 @@
             <a href="{% url 'entry' entry %}"><li>{{ entry }}</li></a>
         {% endfor %}
     </ul>
-
+    {% if error %}
+        <p class="text-danger mb-0">{{ error }}</p>
+    {% endif %}
 {% endblock %}
