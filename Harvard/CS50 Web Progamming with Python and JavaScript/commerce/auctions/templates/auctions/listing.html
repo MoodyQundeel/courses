@@ -1,0 +1,58 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+    <div id="listing">
+        {% if listing.photo %}
+            <img src="{{ listing.photo }}" alt="an image of the listing" class="img-thumbnail mb-3">
+        {% endif %}
+        <h2 class="mb-0">{{ listing.title }}</h2>
+        <span>by: {{ listing.user }}</span>
+        <p class="mt-3">{{ listing.description }}</p>
+        {% if listing.winning_bid == None %}
+            <h3>Starting bid: {{ listing.starting_bid }}$ </h3>
+        {% elif listing.winning_bid.user == user %}
+            <h3>Your bid is the winning bid: {{ listing.winning_bid.value }}$ </h3>
+        {% else %}
+            {% if not listing.open %}
+                <h3>Winner: {{ listing.winning_bid.user }} with a bid of {{ listing.winning_bid }}$ </h3>
+            {% else %}
+                <h3>Current bid: {{ listing.winning_bid.value }}$ </h3>
+            {% endif %}
+        {% endif %}
+        <h5>Bids: {{ listing.bids.count }}</h5>
+        {% if listing.open %}
+                {% if listing.user == user %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="submit" formaction="{% url 'close' listing.id %}" value="Close" class="btn btn-danger mb-5"
+                    </form>
+                {% else %}
+                    <form  method="post" novalidate class="mb-5">
+                        {% csrf_token %}
+                        {{ placeBidForm }}
+                        <div>   
+                            <input type="submit" formaction="{% url 'listing' listing.id %}" value="Place Bid" class="btn btn-primary">
+                            {% if listing in user.watchlist.all %}
+                                <input type="submit" formaction="{% url 'watchlist_modify' listing.id %}" value="Remove from Watchlist" class="btn btn-primary">
+                            {% else %}
+                                <input type="submit" formaction="{% url 'watchlist_modify' listing.id %}" value="Add to Watchlist" class="btn btn-primary">
+                            {% endif %}
+                        </div>
+                    </form>
+                {% endif %} 
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                {{ commentForm }}
+                <div>
+                    <input type="submit" formaction="{% url 'comment' listing.id %}" value="Comment" class="btn btn-primary">
+                </div>
+            </form>
+            <h4 class="mt-3"> Comments </h4>
+            <ul class="list-group my-3">
+                {% for comment in listing.comments.all %}
+                    <li class="list-group-item comment">{{ comment.user }}: {{ comment.text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

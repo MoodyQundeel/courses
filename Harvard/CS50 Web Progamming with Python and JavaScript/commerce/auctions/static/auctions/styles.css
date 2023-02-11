@@ -1,0 +1,45 @@
+body {
+    padding: 30px;
+    font-family: sans-serif;
+}
+
+form {
+    max-width: 500px;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+#listing {
+    max-width: 600px;
+}
+
+p {
+    font-size: 20px;
+    max-width: 600px;
+    text-overflow: ellipsis;
+}
+
+img {
+    max-height: 300px;
+    max-width: 300px;
+}
+
+.list-group-item {
+    max-width: 800px;
+}
+
+.comment {
+    white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.nav-link:first-child {
+    padding-left: 0;
+}
