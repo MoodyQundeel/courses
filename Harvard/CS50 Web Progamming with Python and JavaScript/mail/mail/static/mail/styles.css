@@ -1,0 +1,35 @@
+textarea {
+    min-height: 400px;
+}
+
+.email {
+    display: flex;
+    align-items: center;
+    background-color: rgb(204, 199, 199);
+    padding: 0.5rem;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.email-sender {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.email-subject {
+    font-size: 1.15rem;
+}
+
+.email-time {
+    text-align: end;
+    flex: 1;
+}
+
+.read {
+    background-color: white;
+}
+
+#body {
+    font-size: 25px;
+}
