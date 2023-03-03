@@ -14,7 +14,7 @@
             <h3>Your bid is the winning bid: {{ listing.winning_bid.value }}$ </h3>
         {% else %}
             {% if not listing.open %}
-                <h3>Winner: {{ listing.winning_bid.user }} with a bid of {{ listing.winning_bid }}$ </h3>
+                <h3>Winner: {{ listing.winning_bid.user }} with a bid of {{ listing.winning_bid.value }}$ </h3>
             {% else %}
                 <h3>Current bid: {{ listing.winning_bid.value }}$ </h3>
             {% endif %}
@@ -24,7 +24,7 @@
                 {% if listing.user == user %}
                     <form method="post">
                         {% csrf_token %}
-                        <input type="submit" formaction="{% url 'close' listing.id %}" value="Close" class="btn btn-danger mb-5"
+                        <input type="submit" formaction="{% url 'close' listing.id %}" value="Close" class="btn btn-danger mb-5">
                     </form>
                 {% else %}
                     <form  method="post" novalidate class="mb-5">
