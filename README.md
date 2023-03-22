@@ -1,4 +1,9 @@
 # Courses 
+
+### 
+Taking 
+- Harvard CS50 Web Programming With Python and JavaScript
+
 ### Completed
 - Harvard CS50 Intro to Computer Science
 - FCC Responsive Web Design
