@@ -1,7 +1,6 @@
 # Courses 
 
-### 
-Taking 
+### Taking 
 - Harvard CS50 Web Programming With Python and JavaScript
 
 ### Completed
