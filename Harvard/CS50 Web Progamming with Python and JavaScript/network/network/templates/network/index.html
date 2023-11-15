@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+        <form class="pb-4" id="new-post-form" method="post" action="{% url 'post' %}">
+             <div class="form-group">
+                <textarea class="form-control" name="new-post-text" id="new-post-text"></textarea> 
+            </div>
+            <button class="btn btn-primary" type="submit" id="new-post-button">New Post</button>
+        </form>
+    {% endif %}
+    {% include "network/render_posts.html" %}
+    <script src="{% static "network/posts.js" %}"></script>
+{% endblock %}

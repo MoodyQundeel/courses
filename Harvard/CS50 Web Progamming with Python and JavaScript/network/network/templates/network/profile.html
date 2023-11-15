@@ -1,0 +1,24 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="mb-5" id="profile-details">
+        <h1>{{ profile_user.username }}</h1>
+        <div class="d-flex">
+            <h6 class="mr-3" id="follower-count">Followers: {{ profile_user.followers.count | default:"0" }}</h6>
+            <h6 id="following-count">Following: {{ profile_user.following.count | default:"0"}}</h6>
+        </div>
+    
+        {% if profile_user.username != user.username %}
+            {% if profile_user in user.following.all %}
+                <button class="btn btn-danger" id="follow-button">Unfollow</button>
+            {% else %}
+                <button class="btn btn-success" id="follow-button">Follow</button>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% include "network/render_posts.html" %}
+    
+    <script src="{% static "network/profile.js" %}"></script>
+    <script src="{% static "network/posts.js" %}"></script>
+{% endblock %}

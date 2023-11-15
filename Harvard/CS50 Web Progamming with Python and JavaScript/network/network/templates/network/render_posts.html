@@ -1,0 +1,35 @@
+{% for post in posts %}
+    <div class="post mb-3">
+        <a class="font-weight-bold text-reset h6" href="{% url 'profile' post.user %}">{{ post.user }}</a>
+        <p>{{ post.text }}</p>
+        <div>
+            <span>{{ post.likes.count|default:0 }}</span>
+            {% if post in user.likes.all %}
+                <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
+                    thumb_down
+                </span>
+            {% else %}
+            <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
+                    thumb_up
+                </span>
+            {% endif %}
+            {% if profile_user.username == user.username %}
+                <span id="edit-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">edit</span>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+<nav class="mt-3 align-self-center mx-auto d-flex justify-content-center" aria-label="Page navigation">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">first</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+        {% if posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">next</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ posts.paginator.num_pages }}">last</a></li>
+        {% endif %}
+    </ul>
+</nav>  
