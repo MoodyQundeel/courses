@@ -10,7 +10,7 @@ import json
 from .models import User, Post
 
 def paginate(request, posts):
-    p = Paginator(posts, 4)
+    p = Paginator(posts, 3)
     page_number = request.GET.get("page") 
     if not page_number:
         page_number = 1

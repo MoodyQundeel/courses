@@ -1,21 +1,25 @@
 {% for post in posts %}
-    <div class="post mb-3">
-        <a class="font-weight-bold text-reset h6" href="{% url 'profile' post.user %}">{{ post.user }}</a>
-        <p>{{ post.text }}</p>
-        <div>
-            <span>{{ post.likes.count|default:0 }}</span>
-            {% if post in user.likes.all %}
-                <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
-                    thumb_down
-                </span>
-            {% else %}
-            <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
-                    thumb_up
-                </span>
-            {% endif %}
-            {% if profile_user.username == user.username %}
-                <span id="edit-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">edit</span>
-            {% endif %}
+    <div class="post mb-3 border rounded-lg p-3">
+        <div class="">
+            <a class="font-weight-bold text-reset" href="{% url 'profile' post.user %}">{{ post.user }}</a>
+            <p class="mb-1">{{ post.text }}</p>
+            <p class="text-muted"> {{ post.timestamp }}</p>
+            <div>
+                {% if post in user.likes.all %}
+                    <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
+                        thumb_down
+                    </span>
+                {% else %}
+                    <span id="like-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">
+                            thumb_up
+                    </span>
+                {% endif %}
+                <span>{{ post.likes.count|default:0 }}</span>
+                
+                {% if profile_user.username == user.username %}
+                    <span id="edit-button" data-post-id="{{ post.id }}" class="material-symbols-outlined clickable">edit</span>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endfor %}

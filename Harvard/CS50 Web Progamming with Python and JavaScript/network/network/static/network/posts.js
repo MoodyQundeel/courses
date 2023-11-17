@@ -4,7 +4,7 @@ addEventListener("DOMContentLoaded", () => {
     if (editButton) {
         editButton.onclick = (e) => {
             let postText = e.target.parentElement.parentElement.children[1];
-            if (editButton.innerHTML == "Submit") {
+            if (editButton.innerHTML == "edit_note") {
                 fetch("/edit", {
                     method: "POST",
                     body: JSON.stringify({
@@ -41,7 +41,7 @@ addEventListener("DOMContentLoaded", () => {
                         } else {
                             button.innerHTML = "thumb_up";
                         }
-                        button.parentElement.children[0].innerHTML =
+                        button.parentElement.children[1].innerHTML =
                             data["likes"];
                     });
             };
